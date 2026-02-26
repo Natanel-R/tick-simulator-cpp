@@ -6,11 +6,19 @@
 
 void Strategy::calculate_signals(const MarketEvent& event)
 {
-    // Need to add calculation based on the event
+    if (event.price < 150000) // 150$
+    {
+        SignalEvent signal;
+        signal.type = EventType::SIGNAL;
+        signal.timestamp = event.timestamp;
+        signal.quantity = 100;
+        signal.price = event.price;
+        signal.side = Side::Buy;
 
-    SignalEvent ny_signal;
-    my_signal.type = EventType::SIGNAL;
-
-    Event new_event = my_signal;
-    engine->pushEvent(new_event);
+        for (int i = 0; i < 8; ++i)
+        {
+            signal.symbol[i] = event.symbol[i];
+        }
+        engine->pushEvent(signal);
+    }
 }
