@@ -12,47 +12,60 @@ bool DataHandler::read_next_tick()
         return false;
     }
     std::string line_string;
-    if (!std::getline(csv_file, line_string)) return false;
-    std::stringstream line_stream(line_string); 
 
-    std::string date_str;
-    std::string sym_str;
-    std::string open_str;
-    std::string high_str;
-    std::string low_str;
-    std::string close_str;
-    std::string volume_str;
-    std::getline(line_stream, date_str, ',');
-    std::getline(line_stream, sym_str, ',');
-    std::getline(line_stream, open_str, ',');
-    std::getline(line_stream, high_str, ',');
-    std::getline(line_stream, low_str, ',');
-    std::getline(line_stream, close_str, ',');
-    std::getline(line_stream, volume_str);
-
-    uint64_t date = std::stoull(date_str);
-    uint64_t volume = std::stoull(volume_str);
-    uint64_t open = static_cast<uint64_t>(std::stod(open_str) * 1000);
-    uint64_t high = static_cast<uint64_t>(std::stod(high_str) * 1000);
-    uint64_t low = static_cast<uint64_t>(std::stod(low_str) * 1000);
-    uint64_t close = static_cast<uint64_t>(std::stod(close_str) * 1000);
-
-    MarketEvent event;
-    event.date = date;
-    event.open = open;
-    event.high = high;
-    event.low = low;
-    event.close = close;
-    event.volume = volume;
-    event.type = EventType::MARKET;
-    size_t copy_len = sym_str.length();
-    if (copy_len > 7) copy_len = 7;
-    for (size_t i = 0; i < copy_len; ++i)
+    while (std::getline(csv_file, line_string))
     {
-        event.symbol[i] = sym_str[i];
+        std::stringstream line_stream(line_string); 
+        std::string date_str;
+        std::string sym_str;
+        std::string open_str;
+        std::string high_str;
+        std::string low_str;
+        std::string close_str;
+        std::string volume_str;
+        std::getline(line_stream, date_str, ',');
+        std::getline(line_stream, sym_str, ',');
+        std::getline(line_stream, open_str, ',');
+        std::getline(line_stream, high_str, ',');
+        std::getline(line_stream, low_str, ',');
+        std::getline(line_stream, close_str, ',');
+        std::getline(line_stream, volume_str);
+        try
+        {
+            uint64_t date = std::stoull(date_str);
+            uint64_t volume = std::stoull(volume_str);
+            uint64_t open = static_cast<uint64_t>(std::stod(open_str) * 1000);
+            uint64_t high = static_cast<uint64_t>(std::stod(high_str) * 1000);
+            uint64_t low = static_cast<uint64_t>(std::stod(low_str) * 1000);
+            uint64_t close = static_cast<uint64_t>(std::stod(close_str) * 1000);
+
+            MarketEvent event;
+            event.date = date;
+            event.open = open;
+            event.high = high;
+            event.low = low;
+            event.close = close;
+            event.volume = volume;
+            event.type = EventType::MARKET;
+            size_t copy_len = sym_str.length();
+            if (copy_len > 7) copy_len = 7;
+            for (size_t i = 0; i < copy_len; ++i)
+            {
+                event.symbol[i] = sym_str[i];
+            }
+            event.symbol[copy_len] = '\0';
+            engine->pushEvent(event);
+            
+            return true;
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << "--- DATA ERROR DETECTED ---" << std::endl;
+            std::cout << "Full line: " << line_string << std::endl;
+            std::cout << "Date string caught: [" << date_str << "]" << std::endl;
+            std::cout << "Volume string caught: [" << volume_str << "]" << std::endl;
+            throw e;
+        }
     }
-    event.symbol[copy_len] = '\0';
-    engine->pushEvent(event);
-    
-    return true;
+    return false;
 }

@@ -5,12 +5,12 @@ def main():
     print("Loading backtest data...")
     
     # 1. Load the market data and the trades
-    market_data = pd.read_csv("historical_data.csv")
+    market_data = pd.read_csv("historical_data.csv", names=['Date', 'Symbol', 'Open', 'High', 'Low', 'Close', 'Volume'])
     trades = pd.read_csv("trades.csv")
-    
+
     # Convert dates to strings so they look nice on the X-axis
-    market_data['Date'] = market_data['Date'].astype(str)
-    trades['Date'] = trades['Date'].astype(str)
+    market_data['Date'] = pd.to_datetime(market_data['Date'], format='%Y%m%d')
+    trades['Date'] = pd.to_datetime(trades['Date'], format='%Y%m%d')
 
     # 2. Setup the dashboard (2 rows, 1 column)
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
@@ -47,9 +47,9 @@ def main():
     ax2.grid(True, linestyle='--', alpha=0.6)
 
     # 3. Render the dashboard
+    fig.autofmt_xdate() # Adds the 45-degree tilt to the dates
     plt.tight_layout()
-    plt.tight_layout()
-    plt.savefig("backtest_report.png", dpi=300) # dpi=300 makes it look professional and crisp
+    plt.savefig("backtest_report.png", dpi=300)
     print("Dashboard saved successfully as 'backtest_report.png'!")
 
 if __name__ == "__main__":

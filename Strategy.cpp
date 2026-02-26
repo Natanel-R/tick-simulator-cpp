@@ -6,7 +6,11 @@
 
 void Strategy::calculate_signals(const MarketEvent& event)
 {
-    if (!invested && event.close < 150000) // 150$
+    fast_sma.update(event.close);
+    slow_sma.update(event.close);
+    if (!fast_sma.is_ready() || !slow_sma.is_ready()) return;
+
+    if (fast_sma.get_value() > slow_sma.get_value() && !invested)
     {
         SignalEvent signal;
         signal.date = event.date;
@@ -22,7 +26,7 @@ void Strategy::calculate_signals(const MarketEvent& event)
         engine->pushEvent(signal);
         invested = true;
     }
-    else if (invested && event.close > 150000)
+    else if (fast_sma.get_value() < slow_sma.get_value() && invested)
     {
         SignalEvent signal;
         signal.date = event.date;
