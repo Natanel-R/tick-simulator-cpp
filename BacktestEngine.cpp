@@ -21,7 +21,7 @@ void BacktestEngine::run()
             }
             else if constexpr (std::is_same_v<PayloadType, OrderEvent>)
             {
-
+                
             }
             else if constexpr (std::is_same_v<PayloadType, FillEvent>)
             {   

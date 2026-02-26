@@ -14,12 +14,15 @@ private:
     std::queue<Event> eventQueue;
     Strategy* strategy;
     Portfolio* portfolio;
+    ExecutionHandler* executionHandler;
 
 public:
     BacktestEngine() = default;
-    BacktestEngine(Strategy* strat, Portfolio* port) : strategy(strat), portfolio(port) {}
+    BacktestEngine(Strategy* strat, Portfolio* port, ExecutionHandler* exec) : strategy(strat), 
+                    portfolio(port), executionHandler(exec) {}
     void pushEvent(const Event& event) { eventQueue.push(event); }
     void setStrategy(Strategy* strat) { strategy = strat; }
     void setPortfolio(Portfolio* port) { portfolio = port; }
+    void setExecutionHandler(ExecutionHandler* exec) { executionHandler = exec; }
     void run();
 };
