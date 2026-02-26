@@ -18,18 +18,21 @@ enum class Side
 
 struct MarketEvent
 {
-    uint64_t timestamp;
-    uint64_t quantity;
-    uint64_t price;
+    uint64_t date;
+    uint64_t open;
+    uint64_t high;
+    uint64_t low;
+    uint64_t close;
+    uint64_t volume;
     char symbol[8];
     EventType type;
 };
 
 struct SignalEvent
 {
-    uint64_t timestamp;
-    uint64_t quantity;
+    uint64_t date;
     uint64_t price;
+    uint64_t quantity;
     char symbol[8];
     EventType type;
     Side side;
@@ -37,9 +40,9 @@ struct SignalEvent
 
 struct OrderEvent
 {
-    uint64_t timestamp;
-    uint64_t quantity;
+    uint64_t date;
     uint64_t price;
+    uint64_t quantity;
     char symbol[8];
     EventType type;
     Side side;
@@ -47,9 +50,9 @@ struct OrderEvent
 
 struct FillEvent
 {
-    uint64_t timestamp;
-    uint64_t quantity;
+    uint64_t date;
     uint64_t price;
+    uint64_t quantity;
     uint64_t commission;
     char symbol[8];
     EventType type;

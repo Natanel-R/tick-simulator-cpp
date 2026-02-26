@@ -13,7 +13,7 @@ int main()
 {
     BacktestEngine engine;
     Strategy strategy(&engine);
-    Portfolio portfolio(&engine);
+    Portfolio portfolio(&engine, "trades.csv");
     ExecutionHandler execution_handler(&engine);
     DataHandler data_handler(&engine, "historical_data.csv");
 

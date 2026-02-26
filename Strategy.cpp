@@ -6,12 +6,12 @@
 
 void Strategy::calculate_signals(const MarketEvent& event)
 {
-    if (!invested && event.price < 150000) // 150$
+    if (!invested && event.close < 150000) // 150$
     {
         SignalEvent signal;
-        signal.timestamp = event.timestamp;
+        signal.date = event.date;
         signal.quantity = 100;
-        signal.price = event.price;
+        signal.price = event.close;
         signal.type = EventType::SIGNAL;
         signal.side = Side::Buy;
 
@@ -22,12 +22,12 @@ void Strategy::calculate_signals(const MarketEvent& event)
         engine->pushEvent(signal);
         invested = true;
     }
-    else if (invested && event.price > 150000)
+    else if (invested && event.close > 150000)
     {
         SignalEvent signal;
-        signal.timestamp = event.timestamp;
+        signal.date = event.date;
         signal.quantity = 100;
-        signal.price = event.price;
+        signal.price = event.close;
         signal.type = EventType::SIGNAL;
         signal.side = Side::Sell; 
         

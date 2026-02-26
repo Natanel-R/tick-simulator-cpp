@@ -5,7 +5,7 @@
 void ExecutionHandler::on_order(const OrderEvent& event)
 {
     FillEvent fill;
-    fill.timestamp = event.timestamp;
+    fill.date = event.date;
     fill.quantity = event.quantity;
     fill.price = event.price;
     fill.type = EventType::FILL;

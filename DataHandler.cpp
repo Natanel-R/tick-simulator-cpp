@@ -15,22 +15,35 @@ bool DataHandler::read_next_tick()
     if (!std::getline(csv_file, line_string)) return false;
     std::stringstream line_stream(line_string); 
 
-    std::string ts_str;
+    std::string date_str;
     std::string sym_str;
-    std::string price_str;
-    std::string qty_str;
-    std::getline(line_stream, ts_str, ',');
+    std::string open_str;
+    std::string high_str;
+    std::string low_str;
+    std::string close_str;
+    std::string volume_str;
+    std::getline(line_stream, date_str, ',');
     std::getline(line_stream, sym_str, ',');
-    std::getline(line_stream, price_str, ',');
-    std::getline(line_stream, qty_str);
+    std::getline(line_stream, open_str, ',');
+    std::getline(line_stream, high_str, ',');
+    std::getline(line_stream, low_str, ',');
+    std::getline(line_stream, close_str, ',');
+    std::getline(line_stream, volume_str);
 
-    uint64_t ts = std::stoull(ts_str);
-    uint64_t qty = std::stoull(qty_str);
-    uint64_t price = static_cast<uint64_t>(std::stod(price_str) * 1000);
+    uint64_t date = std::stoull(date_str);
+    uint64_t volume = std::stoull(volume_str);
+    uint64_t open = static_cast<uint64_t>(std::stod(open_str) * 1000);
+    uint64_t high = static_cast<uint64_t>(std::stod(high_str) * 1000);
+    uint64_t low = static_cast<uint64_t>(std::stod(low_str) * 1000);
+    uint64_t close = static_cast<uint64_t>(std::stod(close_str) * 1000);
+
     MarketEvent event;
-    event.timestamp = ts;
-    event.quantity = qty;
-    event.price = price;
+    event.date = date;
+    event.open = open;
+    event.high = high;
+    event.low = low;
+    event.close = close;
+    event.volume = volume;
     event.type = EventType::MARKET;
     size_t copy_len = sym_str.length();
     if (copy_len > 7) copy_len = 7;
