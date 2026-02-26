@@ -6,6 +6,11 @@
 
 bool DataHandler::read_next_tick()
 {
+    if (!csv_file.is_open())
+    {
+        std::cout << "CRITICAL ERROR: Could not open the CSV file!\n";
+        return false;
+    }
     std::string line_string;
     if (!std::getline(csv_file, line_string)) return false;
     std::stringstream line_stream(line_string); 

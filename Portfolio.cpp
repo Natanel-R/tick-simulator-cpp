@@ -20,7 +20,7 @@ void Portfolio::on_signal(const SignalEvent& event)
 void Portfolio::on_fill(const FillEvent& event)
 {
     int64_t cost = (event.price * event.quantity) + event.commission;
-    if (event.Side == Side::Buy)
+    if (event.side == Side::Buy)
     {
         current_cash -= cost;
         current_holdings += event.quantity;

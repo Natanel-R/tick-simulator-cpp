@@ -49,7 +49,7 @@ struct FillEvent
 {
     uint64_t timestamp;
     uint64_t quantity;
-    uint64_t price
+    uint64_t price;
     uint64_t commission;
     char symbol[8];
     EventType type;
