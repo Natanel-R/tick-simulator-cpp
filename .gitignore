@@ -39,3 +39,8 @@
 
 # debug information files
 *.dwo
+*.csv
+backtester
+.vscode/
+*.png
+venv/
