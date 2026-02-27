@@ -6,11 +6,14 @@
 
 void Strategy::calculate_signals(const MarketEvent& event)
 {
-    fast_sma.update(event.close);
-    slow_sma.update(event.close);
-    if (!fast_sma.is_ready() || !slow_sma.is_ready()) return;
+    std::string tick_symbol(event.symbol);
+    SymbolState& state = symbol_states[tick_symbol];
 
-    if (fast_sma.get_value() > slow_sma.get_value() && !invested)
+    state.fast_sma.update(event.close);
+    state.slow_sma.update(event.close);
+    if (!state.fast_sma.is_ready() || !state.slow_sma.is_ready()) return;
+
+    if (state.fast_sma.get_value() > state.slow_sma.get_value() && !state.invested)
     {
         SignalEvent signal;
         signal.date = event.date;
@@ -24,9 +27,9 @@ void Strategy::calculate_signals(const MarketEvent& event)
             signal.symbol[i] = event.symbol[i];
         }
         engine->pushEvent(signal);
-        invested = true;
+        state.invested = true;
     }
-    else if (fast_sma.get_value() < slow_sma.get_value() && invested)
+    else if (state.fast_sma.get_value() < state.slow_sma.get_value() && state.invested)
     {
         SignalEvent signal;
         signal.date = event.date;
@@ -39,6 +42,6 @@ void Strategy::calculate_signals(const MarketEvent& event)
             signal.symbol[i] = event.symbol[i];
         }
         engine->pushEvent(signal);
-        invested = false; 
+        state.invested = false; 
     }
 }
