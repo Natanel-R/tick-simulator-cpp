@@ -9,8 +9,8 @@ def main():
     trades = pd.read_csv("trades.csv")
 
     # Convert dates to strings so they look nice on the X-axis
-    market_data['Date'] = pd.to_datetime(market_data['Date'], format='%Y%m%d')
-    trades['Date'] = pd.to_datetime(trades['Date'], format='%Y%m%d')
+    market_data['Date'] = pd.to_datetime(market_data['Date'], format='%Y%m%d%H%M')
+    trades['Date'] = pd.to_datetime(trades['Date'], format='%Y%m%d%H%M')
 
     # 2. Setup the dashboard (2 rows, 1 column)
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
