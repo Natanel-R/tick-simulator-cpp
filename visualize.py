@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 def main():
@@ -40,6 +41,31 @@ def main():
     # Fill any starting NaN values with our initial $100,000
     merged['Cash'] = merged['Cash'].fillna(100000.0) 
 
+    # Total return
+    starting_cash = 100000.0
+    ending_cash = merged['Cash'].iloc[-1]
+    total_return = ((ending_cash / starting_cash) - 1.0) * 100
+    # Max Drawdown
+    running_max = merged['Cash'].cummax()
+    drawdown = (merged['Cash'] / running_max) - 1.0
+    max_drawdown = drawdown.min() * 100
+    # Sharpe ratio
+    daily_returns = merged['Cash'].pct_change().dropna()
+    if daily_returns.std() != 0:
+        sharpe_ratio = (daily_returns.mean() / daily_returns.std()) * np.sqrt(252)
+    else:
+        sharpe_ratio = 0.0
+    print("\n" + "="*30)
+    print("BACKTEST RESULTS")
+    print("="*30)
+    print(f"Final Cash:   ${ending_cash:,.2f}")
+    print(f"Total Return: {total_return:.2f}%")
+    print(f"Max Drawdown: {max_drawdown:.2f}%")
+    print(f"Sharpe Ratio: {sharpe_ratio:.2f}")
+    print("="*30 + "\n")
+
+
+    # Plot
     ax2.plot(merged['Date'], merged['Cash'], label='Portfolio Cash', color='blue', linewidth=2)
     ax2.set_ylabel("Cash Balance ($)")
     ax2.set_xlabel("Date")
