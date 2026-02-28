@@ -84,7 +84,3 @@ python visualize.py
 └── main.cpp               # Engine initialization and hardware profiling
 ```
 
-## 📈 Future Enhancements
-* Order Book implementation for Limit Orders.
-* Volume-based dynamic market impact (slippage scaling).
-* WebSocket integration for live-market data ingestion.
