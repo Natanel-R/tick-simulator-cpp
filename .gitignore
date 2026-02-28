@@ -44,3 +44,5 @@ backtester
 .vscode/
 *.png
 venv/
+build/
+cmake-build-*/

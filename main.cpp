@@ -15,9 +15,9 @@ int main()
 {
     BacktestEngine engine;
     Strategy strategy(&engine);
-    Portfolio portfolio(&engine, "trades.csv");
+    Portfolio portfolio(&engine, "../trades.csv");
     ExecutionHandler execution_handler(&engine);
-    DataHandler data_handler(&engine, "historical_data.csv");
+    DataHandler data_handler(&engine, "../historical_data.csv");
 
     engine.setStrategy(&strategy);
     engine.setPortfolio(&portfolio);
