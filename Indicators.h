@@ -7,7 +7,7 @@ class SMA
 {
 private:
     std::deque<double> prices;
-    uint64_t total_sum = 0;
+    double total_sum = 0;
     uint64_t period;
 public:
     SMA(uint64_t p) : period(p) {}
