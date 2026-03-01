@@ -13,8 +13,6 @@
 
 int main()
 {
-    for (int i = 0; i < 1000; ++i)
-    {
     BacktestEngine engine;
     Strategy strategy(&engine);
     Portfolio portfolio(&engine, "../trades.csv");
@@ -36,10 +34,9 @@ int main()
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
 
-    /*std::cout << "Total Ticks Processed: " << tick_count << ".\n";
+    std::cout << "Total Ticks Processed: " << tick_count << ".\n";
     std::cout << "Total Time Elapsed: " << duration << " microseconds.\n";
     if (tick_count != 0) std::cout << "Average Time Per Tick: " << (static_cast<double>(duration) / tick_count) << ".\n";
-    else std::cout << "Average Time Per Tick: 0 microseconds.\n";*/
-    }
+    else std::cout << "Average Time Per Tick: 0 microseconds.\n";
     return 0;
 }
