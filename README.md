@@ -19,7 +19,7 @@ The system is decoupled into three distinct layers to maximize execution speed:
 * **Rigorous Unit Testing:** Mathematical validation of all quantitative indicators using Google Test (GTest) to prevent fixed-point truncation and floating-point drift.
 * **Fixed-Point Accounting:** Protects portfolio cash balances from precision loss.
 * **Realistic Execution Friction:** Simulates BPS-based slippage and flat-fee commissions.
-* **Hardware Profiling:** Built-in `std::chrono` high-resolution timers to profile the hot path.
+* **Hardware Profiling:** Linux `perf` integration, Flamegraph generation, and built-in `std::chrono` high-resolution timers to profile the hot path.
 
 ---
 
@@ -29,6 +29,7 @@ The system is decoupled into three distinct layers to maximize execution speed:
 * **Build System:** `CMake` (3.10+)
 * **Python:** 3.10+ 
 * **Python Libraries:** `pandas`, `yfinance`, `matplotlib`, `numpy`
+* **Profiling (Optional):** Linux `perf` and Brendan Gregg's FlameGraph toolkit.
 
 ---
 
@@ -50,11 +51,17 @@ python download_data.py
 *Expected Output: `historical_data.csv` (No headers, clean timeline).*
 
 ### 3. Compile the C++ Engine (Out-of-Source Build)
-Use CMake to generate the build files, download GTest, and compile the system with maximum hardware optimization (`-O3`).
+Use CMake to generate the build files and compile the system. You can choose between raw speed or hardware profiling mode.
 ```bash
 mkdir build
 cd build
-cmake ..
+
+# For Maximum Performance (Default: -O3 optimization)
+cmake -DCMAKE_BUILD_TYPE=Release ..
+
+# For Hardware Profiling & Flamegraphs (Includes debug symbols)
+# cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+
 make
 ```
 
@@ -79,6 +86,15 @@ cd ..
 python visualize.py
 ```
 *Expected Output: Terminal printout of risk metrics and a `backtest_report.png` chart.*
+
+---
+
+## 🔬 Hardware Profiling & Engineering Insights
+
+Using the Linux `perf` profiler and Brendan Gregg's Flamegraphs, the execution pipeline was analyzed at the silicon level to identify architectural bottlenecks. 
+
+### The I/O and Parsing Tax
+Flamegraph analysis revealed that the core event-driven state machine (`BacktestEngine`, `Strategy`, `Portfolio`) executes in a tiny fraction of total CPU time. The vast majority of execution time (~85-90%) is bottlenecked by the C++ Standard Library's CSV parsing—specifically `std::basic_istream` for file reading and `__GI____strtod_l_internal` for string-to-double conversion. 
 
 ---
 
